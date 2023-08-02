@@ -51,5 +51,4 @@ Route::controller(UserController::class)->group(function(){
     Route::post('/create_account','create');
     Route::post('/login/process','process');
     Route::post('/logout','logout');
-
 });
