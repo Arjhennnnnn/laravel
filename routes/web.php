@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,12 +35,21 @@ Route::controller(EmployeeController::class)->group(function(){
     Route::delete('/delete/{id}','destroy');
     Route::post('/search','search');
     Route::get('/edit/{id}','edit');
+
     Route::get('/tryhasmany','tryhasmany');
     Route::get('/trybelongsto','trybelongsto');
-    Route::get('/supervisor','supervisor');
+    Route::get('/supervisor','supervisor')->name('home')->middleware('auth');
     Route::post('/view/member/{id}','viewmember');
+});
 
-    
+// Route::get('/', [EmployeeController::class, 'home']);
 
+
+Route::controller(UserController::class)->group(function(){
+    Route::get('/userlogin','login')->name('login')->middleware('guest');
+    Route::get('/register','register');
+    Route::post('/create_account','create');
+    Route::post('/login/process','process');
+    Route::post('/logout','logout');
 
 });
