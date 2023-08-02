@@ -19,8 +19,8 @@ class EmployeesFactory extends Factory
         return [
             'supervisor_id' => fake()->numberBetween(1,10),
             'firstname' => fake()->firstName(),
-            'middlename' => fake()->firstName(),
-            'lastname' => fake()->firstName(),
+            'middlename' => fake()->lastName(),
+            'lastname' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
             'contactnumber' => fake()->phoneNumber()
         ];
