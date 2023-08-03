@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\UserController;
+use App\Models\Category;
 use App\Models\Post;
 
 
@@ -60,20 +61,20 @@ Route::get('/posts',function(){
 });
 
 
-Route::get('posts/{post}',function($slug){
+// Route::get('posts/{post}',function($slug){
 
-    $post = Post::find($slug);
+//     $post = Post::find($slug);
 
-    $path = __DIR__. "/../resources/posts/{$slug}.html";
-    if(! file_exists($path)){
+//     $path = __DIR__. "/../resources/posts/{$slug}.html";
+//     if(! file_exists($path)){
 
-        abort(404);
-    }
+//         abort(404);
+//     }
 
-    $post = cache()->remember("posts.{$slug}",5, fn() =>  file_get_contents($path));
+//     $post = cache()->remember("posts.{$slug}",5, fn() =>  file_get_contents($path));
 
-    return view('post',['post' => $post ]);
-});
+//     return view('post',['post' => $post ]);
+// });
 
 
 
@@ -81,5 +82,23 @@ Route::get('/blades',function(){
     return view('page');
 });
 
+Route::get('/posts/{post:slug}',function(Post $post){
+    // return view('page');
+    return $post->title;
+});
+
 
 Route::get('/manual', [UserController::class, 'createmanual']);
+Route::get('/create/post', [UserController::class, 'post']);
+Route::get('/view/post', [UserController::class, 'viewpost']);
+
+
+Route::get('/categories/{category}',function(Category $category){
+    // return view('page');
+    return view('post',[
+        'posts' => $category->posts
+    ]);
+});
+
+
+

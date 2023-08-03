@@ -2,32 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Models\Employees;
 use App\Models\User;
+use App\Models\Post;
+
+
 
 class UserController extends Controller
 {
-
-
-    public function register(){
-        return view('user.register',['title' => 'Register']);
-    }
-
-    public function create(Request $request){
-        $validate = $request -> validate([
-            "name" => ['required','min:4'],
-            "email" => ['required','email',Rule::unique('users','email')],
-            "password" => 'required|confirmed|min:6',
-        ]);
-
-        $validate['password'] = Hash::make($validate['password']);
-        User::create($validate);
-        return redirect('/register')->with('message','Register Successfully');
-    }
-
 
     public function createmanual(){
 
@@ -47,6 +33,67 @@ class UserController extends Controller
         dd($user[3]);
 
     }
+
+    public function post(){
+        // $post = new Post;
+        // $post->title = '<h1>My Second Post</h1>';
+        // $post->excerpt = 'lorem jgfjkgjh jghdfjkg jkgfj';
+        // $post->body = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque voluptatum libero tenetur atque porro consequatur ratione optio ducimus repellendus autem?';
+        // $post->save();
+
+        // $post = Post::count();
+        // $post = Post::find(1);
+        // $title = $post->title;
+        // dd($title);
+
+        // Post::create(['title' => 'My Second Post', 'slug' => 'my-second-post', 'excerpt' => 'idunno', 'body' => 'nobody']);
+        // Post::create(['title' => 'My Third Post', 'category_id' => 2, 'slug' => 'my-third-post', 'excerpt' => 'idunno', 'body' => 'nobody']);
+
+
+        // Category::create(['name' => 'Work', 'slug' => 'work']);
+
+
+
+        // $post = Post::find(1);
+        // $post->update(['title' => 'My First Post']);
+        // $post->delete();
+        // $post = Post::first();
+        // $post->category->name;
+
+        $category = Category::first();
+        dd($category->posts);
+        // $post->category->name;
+    }
+
+
+    public function viewpost(){
+        $posts = Post::with('category')->get();
+        dd($posts);
+        return view('post',['posts' => $posts]);
+    }
+
+
+
+
+
+    public function register(){
+        return view('user.register',['title' => 'Register']);
+    }
+
+    public function create(Request $request){
+        $validate = $request -> validate([
+            "name" => ['required','min:4'],
+            "email" => ['required','email',Rule::unique('users','email')],
+            "password" => 'required|confirmed|min:6',
+        ]);
+
+        $validate['password'] = Hash::make($validate['password']);
+        User::create($validate);
+        return redirect('/register')->with('message','Register Successfully');
+    }
+
+
+
 
 
 

@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Post extends Model
 {
     use HasFactory;
-    public static function find($slug){
-        
-    } 
+    protected $fillable = ['title','slug','excerpt','body','id','category_id'];
+
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
 }
