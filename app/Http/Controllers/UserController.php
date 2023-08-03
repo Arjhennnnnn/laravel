@@ -24,9 +24,31 @@ class UserController extends Controller
         ]);
 
         $validate['password'] = Hash::make($validate['password']);
-        $user = User::create($validate);
+        User::create($validate);
         return redirect('/register')->with('message','Register Successfully');
     }
+
+
+    public function createmanual(){
+
+
+        // $user = new User;
+        // $user->name = "Ron";
+        // $user->email = "rongods@gmail.com";
+        // $user->password = bcrypt('!password');
+        // $user->save();
+
+
+        // $user = User::findorFail(12);
+        // dd($user->pluck('name'));
+
+        $user = User::all();
+        // dd($user->first());
+        dd($user[3]);
+
+    }
+
+
 
 
     public function login(){

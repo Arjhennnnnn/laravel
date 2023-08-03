@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\UserController;
+use App\Models\Post;
 
 
 /*
@@ -52,3 +53,33 @@ Route::controller(UserController::class)->group(function(){
     Route::post('/login/process','process');
     Route::post('/logout','logout');
 });
+
+
+Route::get('/posts',function(){
+    return view('posts');
+});
+
+
+Route::get('posts/{post}',function($slug){
+
+    $post = Post::find($slug);
+
+    $path = __DIR__. "/../resources/posts/{$slug}.html";
+    if(! file_exists($path)){
+
+        abort(404);
+    }
+
+    $post = cache()->remember("posts.{$slug}",5, fn() =>  file_get_contents($path));
+
+    return view('post',['post' => $post ]);
+});
+
+
+
+Route::get('/blades',function(){
+    return view('page');
+});
+
+
+Route::get('/manual', [UserController::class, 'createmanual']);
