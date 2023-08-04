@@ -15,9 +15,23 @@ use App\Models\Post;
 class UserController extends Controller
 {
 
+
+    public function search(){
+        $posts = Post::latest();
+        $posts->where('title','like','%'.request('search').'%')
+              ->orWhere('body','like','%'.request('search').'%');
+        dd($posts->get());
+    } 
+
+
+    public function userpost(){
+        $posts = Post::latest()->with('author','category')->take(5)->get();
+
+        return view('try.manyrelationship',['posts' => $posts]);
+    }
+
+
     public function createmanual(){
-
-
         // $user = new User;
         // $user->name = "Ron";
         // $user->email = "rongods@gmail.com";
@@ -91,12 +105,6 @@ class UserController extends Controller
         User::create($validate);
         return redirect('/register')->with('message','Register Successfully');
     }
-
-
-
-
-
-
 
     public function login(){
         return view('user.login',['title' => 'Login']);

@@ -5,7 +5,8 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\UserController;
 use App\Models\Category;
 use App\Models\Post;
-
+use App\Models\User;
+use Clockwork\Storage\Search;
 
 /*
 |--------------------------------------------------------------------------
@@ -99,6 +100,41 @@ Route::get('/categories/{category}',function(Category $category){
         'posts' => $category->posts
     ]);
 });
+
+Route::get('/view/post/user', [UserController::class, 'userpost']);
+
+Route::get('author/{author}', function($slug){
+    // $author = file_get_contents;    
+    $path = __DIR__ . "/../resources/posts/{$slug}.html";
+
+    if(! file_exists($path)){
+        abort(404);
+    }
+    $author = file_get_contents($path);
+
+    return view('try.author',[
+        'author' => $author
+    ]);
+});
+
+
+Route::get('search', function(){ 
+    return view('try.search');
+});
+
+Route::get('search', function(){ 
+    return view('try.search');
+});
+
+Route::get('/search/request/', [UserController::class, 'search']);
+
+Route::get('blade/htmlcss/', function(){ 
+    return view('htmlcss.blade');
+});
+
+
+
+
 
 
 
