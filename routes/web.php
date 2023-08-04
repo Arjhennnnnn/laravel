@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostController;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
@@ -126,7 +127,9 @@ Route::get('search', function(){
     return view('try.search');
 });
 
-Route::get('/search/request/', [UserController::class, 'search']);
+Route::get('/search/request/', [PostController::class, 'search']);
+Route::get('/category/request/', [PostController::class, 'search']);
+
 
 Route::get('blade/htmlcss/', function(){ 
     return view('htmlcss.blade');
@@ -134,7 +137,12 @@ Route::get('blade/htmlcss/', function(){
 
 
 
+// Route::get('boolean/{bool}',function($bool){
 
+//     return $bool === 'bool' ? $bool : "default";
+//     // return $name ?? false;
+    
+// });
 
-
+Route::get('/boolean/{bool}',fn($bool) => $bool === 'bool' ? $bool : "default");
 

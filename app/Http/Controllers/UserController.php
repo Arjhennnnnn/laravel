@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Models\Employees;
+use App\Models\Category;
 use App\Models\User;
 use App\Models\Post;
 
@@ -14,15 +15,6 @@ use App\Models\Post;
 
 class UserController extends Controller
 {
-
-
-    public function search(){
-        $posts = Post::latest();
-        $posts->where('title','like','%'.request('search').'%')
-              ->orWhere('body','like','%'.request('search').'%');
-        dd($posts->get());
-    } 
-
 
     public function userpost(){
         $posts = Post::latest()->with('author','category')->take(5)->get();
@@ -80,11 +72,18 @@ class UserController extends Controller
     }
 
 
+    // public function viewpost(){
+    //     $posts = Post::with('category')->get();
+    //     dd($posts);
+    //     return view('post',['posts' => $posts]);
+    // }
+
     public function viewpost(){
         $posts = Post::with('category')->get();
         dd($posts);
         return view('post',['posts' => $posts]);
     }
+    
 
 
 
