@@ -4,6 +4,11 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Category;
+use App\Models\Post;
+use App\Models\User;
+
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,8 +17,38 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory(10)->create();
-        \App\Models\Employees::factory(20)->create();
+        // \App\Models\User::factory(10)->create();
+
+        // Post::truncate();
+        // Category::truncate();
+
+
+        // $user = User::factory()->create();
+         Post::factory(5)->create();
+
+
+        // $category = Category::create([
+        //     'name' => 'Junior',
+        //     'slug' => 'Junior'
+        // ]);
+
+        // Post::create([
+        //     'title' => 'My Second Post',
+        //     'user_id' => $user->id,
+        //     'category_id' => $category->id,
+        //     'slug' => 'my-second-post',
+        //     'excerpt' => 'idunno',
+        //     'body' => 'nobody'
+        // ]);
+        
+        // $post = Post::find(1);
+        // $post->update([
+        //     'slug' => 'my-first-post',
+        // ]);
+
+
+
+
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',

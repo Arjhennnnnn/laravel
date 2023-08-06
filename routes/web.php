@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostController;
+use App\Models\Category;
+use App\Models\Post;
+use App\Models\User;
+use Clockwork\Storage\Search;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,12 +39,110 @@ Route::controller(EmployeeController::class)->group(function(){
     Route::delete('/delete/{id}','destroy');
     Route::post('/search','search');
     Route::get('/edit/{id}','edit');
+
     Route::get('/tryhasmany','tryhasmany');
     Route::get('/trybelongsto','trybelongsto');
-    Route::get('/supervisor','supervisor');
+    Route::get('/supervisor','supervisor')->name('home')->middleware('auth');
     Route::post('/view/member/{id}','viewmember');
-
-    
-
-
 });
+
+// Route::get('/', [EmployeeController::class, 'home']);
+
+
+Route::controller(UserController::class)->group(function(){
+    Route::get('/userlogin','login')->name('login')->middleware('guest');
+    Route::get('/register','register');
+    Route::post('/create_account','create');
+    Route::post('/login/process','process');
+    Route::post('/logout','logout');
+});
+
+
+Route::get('/posts',function(){
+    return view('posts');
+});
+
+
+// Route::get('posts/{post}',function($slug){
+
+//     $post = Post::find($slug);
+
+//     $path = __DIR__. "/../resources/posts/{$slug}.html";
+//     if(! file_exists($path)){
+
+//         abort(404);
+//     }
+
+//     $post = cache()->remember("posts.{$slug}",5, fn() =>  file_get_contents($path));
+
+//     return view('post',['post' => $post ]);
+// });
+
+
+
+Route::get('/blades',function(){
+    return view('page');
+});
+
+Route::get('/posts/{post:slug}',function(Post $post){
+    // return view('page');
+    return $post->title;
+});
+
+
+Route::get('/manual', [UserController::class, 'createmanual']);
+Route::get('/create/post', [UserController::class, 'post']);
+Route::get('/view/post', [UserController::class, 'viewpost']);
+
+
+Route::get('/categories/{category}',function(Category $category){
+    // return view('page');
+    return view('post',[
+        'posts' => $category->posts
+    ]);
+});
+
+Route::get('/view/post/user', [UserController::class, 'userpost']);
+
+Route::get('author/{author}', function($slug){
+    // $author = file_get_contents;    
+    $path = __DIR__ . "/../resources/posts/{$slug}.html";
+
+    if(! file_exists($path)){
+        abort(404);
+    }
+    $author = file_get_contents($path);
+
+    return view('try.author',[
+        'author' => $author
+    ]);
+});
+
+
+Route::get('search', function(){ 
+    return view('try.search');
+});
+
+Route::get('search', function(){ 
+    return view('try.search');
+});
+
+Route::get('/search/request/', [PostController::class, 'search']);
+Route::get('/category/request/', [PostController::class, 'search']);
+
+
+Route::get('blade/htmlcss/', function(){ 
+    return view('htmlcss.blade');
+});
+
+
+
+// Route::get('boolean/{bool}',function($bool){
+
+//     return $bool === 'bool' ? $bool : "default";
+//     // return $name ?? false;
+    
+// });
+
+Route::get('/boolean/{bool}',fn($bool) => $bool === 'bool' ? $bool : "default");
+

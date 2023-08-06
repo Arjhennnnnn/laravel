@@ -1,8 +1,11 @@
 @include('partials.__header')
-<!-- branch -->
+merge
 <x-alert>
     
 </x-alert>
+<x-navbar>
+</x-navbar>
+
     <div class="row">
         <h1 class="text-center mt-2 fw-bold text-secondary">Supervisor List</h1>
     </div>

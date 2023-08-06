@@ -9,4 +9,6 @@
     <script src="/app.js"></script>
 </head>
 <body>
-   
+    {{ $slot }}
+</body>
+</html>

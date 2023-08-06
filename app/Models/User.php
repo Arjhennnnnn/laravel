@@ -47,5 +47,10 @@ class User extends Authenticatable
     public function members()
     {
         return $this->hasMany(Employees::class, 'supervisor_id', 'id');
+        
+    }
+
+    public function post(){
+        return $this->hasMany(Post::class);
     }
 }
