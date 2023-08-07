@@ -8,6 +8,10 @@
         <p class="text-white ms-2 fw-bold">Published : {{$post->created_at->diffForHumans()}}</p>
         <p class="text-white ms-2 fw-bold">Category : {{$post->category->name}}</p>
     </div>
+    
+    <x-comment/>
+    
+
     @endforeach
     <div class="row my-2">
         {{ $posts->links()}}
