@@ -11,7 +11,7 @@
     <script src="/app.js"></script>
  
 </head>
-<body>
+<body class="ms-3">
 <x-flash/>
 
     {{ $slot }}

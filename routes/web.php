@@ -4,10 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
 use Clockwork\Storage\Search;
+use MailchimpMarketing\ApiClient;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,7 +104,7 @@ Route::get('/categories/{category}',function(Category $category){
     ]);
 });
 
-Route::get('/view/post/user', [UserController::class, 'userpost']);
+Route::get('/view/post/user', [UserController::class, 'userpost'])->middleware('auth');
 
 Route::get('author/{author}', function($slug){
     // $author = file_get_contents;    
@@ -135,6 +137,9 @@ Route::get('blade/htmlcss/', function(){
     return view('htmlcss.blade');
 });
 
+Route::post('/post/{comment}', [UserController::class, 'comment']);
+    // return view('htmlcss.blade');
+
 
 
 // Route::get('boolean/{bool}',function($bool){
@@ -145,4 +150,26 @@ Route::get('blade/htmlcss/', function(){
 // });
 
 Route::get('/boolean/{bool}',fn($bool) => $bool === 'bool' ? $bool : "default");
+
+Route::get('/comment', [CommentController::class, 'show']);
+
+Route::get('mail', function(){ 
+    dd(config('services.mailchimp'));
+});
+
+
+Route::get('ping',function(){
+    
+    $mailchimp = new \MailchimpMarketing\ApiClient();
+
+    $mailchimp->setConfig([
+        'apiKey' => config('services.mailchimp.key'),
+        'server' => 'us21'
+    ]);
+
+    // $response = $mailchimp->ping->get();
+    $response = $mailchimp->lists->getAllLists();
+    ddd($response);
+});
+
 

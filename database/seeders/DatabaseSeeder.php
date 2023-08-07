@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
 
@@ -24,7 +25,7 @@ class DatabaseSeeder extends Seeder
 
 
         // $user = User::factory()->create();
-         Post::factory(5)->create();
+        //  Post::factory(5)->create();
 
 
         // $category = Category::create([
@@ -41,11 +42,20 @@ class DatabaseSeeder extends Seeder
         //     'body' => 'nobody'
         // ]);
         
+
+
         // $post = Post::find(1);
         // $post->update([
         //     'slug' => 'my-first-post',
         // ]);
 
+
+        Comment::create([
+            'post_id' => 1,
+            'user_id' => 1,
+            'body' => 'bodybody',
+        ]);
+        
 
 
 

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use App\Models\Employees;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\User;
 use App\Models\Post;
 use Illuminate\Validation\ValidationException;
@@ -15,14 +16,40 @@ use Illuminate\Validation\ValidationException;
 class UserController extends Controller
 {
 
+    public function comment($post){
+
+        request()->validate([
+            'body' => 'required'
+        ]);
+
+        $user = request()->user()->id;
+        $body = request()->comment;
+
+
+        Comment::create([
+            'post_id' => $post,
+            'user_id' => $user,
+            'body' => $body
+        ]);
+        
+        return back();
+
+    }
+
     public function userpost(){
         // $posts = Post::latest()->with('author','category')->take(5)->get();
 
         // return view('try.manyrelationship',['posts' => $posts]);
 
-        $posts = Post::latest()->with('author','category')->paginate(5);
+        $posts = Post::latest()->with('author','category','comments')->paginate(5);
+        $comments = Comment::with('post')->get();
 
-        return view('try.manyrelationship',['posts' => $posts]);
+
+    
+        // return view('try.manyrelationship',['posts' => $posts]);
+        return view('try.manyrelationship',
+                ['posts' => $posts],
+                ['comments' => $comments]);
     }
 
 

@@ -1,5 +1,4 @@
 @include('partials.__header')
-merge
 <x-alert>
     
 </x-alert>
