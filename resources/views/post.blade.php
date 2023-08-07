@@ -8,4 +8,3 @@
     <br>
 
 @endforeach
-

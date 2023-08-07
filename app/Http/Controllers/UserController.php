@@ -10,14 +10,17 @@ use App\Models\Employees;
 use App\Models\Category;
 use App\Models\User;
 use App\Models\Post;
-
-
+use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
 
     public function userpost(){
-        $posts = Post::latest()->with('author','category')->take(5)->get();
+        // $posts = Post::latest()->with('author','category')->take(5)->get();
+
+        // return view('try.manyrelationship',['posts' => $posts]);
+
+        $posts = Post::latest()->with('author','category')->paginate(5);
 
         return view('try.manyrelationship',['posts' => $posts]);
     }
@@ -83,26 +86,43 @@ class UserController extends Controller
         dd($posts);
         return view('post',['posts' => $posts]);
     }
-    
-
-
-
 
 
     public function register(){
         return view('user.register',['title' => 'Register']);
     }
 
-    public function create(Request $request){
-        $validate = $request -> validate([
-            "name" => ['required','min:4'],
-            "email" => ['required','email',Rule::unique('users','email')],
-            "password" => 'required|confirmed|min:6',
+    // public function create(Request $request){
+    //     $validate = $request -> validate([
+    //         "name" => ['required','min:4'],
+    //         "email" => ['required','email',Rule::unique('users','email')],
+    //         "password" => 'required|confirmed|min:6',
+    //     ]);
+
+    //     $validate['password'] = Hash::make($validate['password']);
+    //     User::create($validate);
+    //     return redirect('/register')->with('message','Register Successfully');
+    // }
+
+    public function create(){
+        // var_dump(request()->all());
+        $attributes = request()->validate([
+            'name' => 'required',
+            // 'email' => 'required|email|unique:users,email', // same code to all //
+            'email' => ['required','email',Rule::unique('users','email')],
+            'password' => 'required|confirmed|min:8',
         ]);
 
-        $validate['password'] = Hash::make($validate['password']);
-        User::create($validate);
-        return redirect('/register')->with('message','Register Successfully');
+        // $attributes['password'] = bcrypt($attributes['password']);
+
+        // return $attributes;
+
+        // return ucwords($attributes['name']);
+        User::create($attributes);
+        
+        // session()->flash('message','Created Successfully');
+        return redirect('/register')->with('message','Created Successfully');
+
     }
 
     public function login(){
@@ -118,6 +138,11 @@ class UserController extends Controller
             $request->session()->regenerate();
             return redirect('/supervisor')->with('message','Welcome Back');
         }
+        // return back()->withErrors(['email' => 'Invalid Credentials']);
+        // else
+        throw ValidationException::withMessages([
+            'email' => 'Invalid Credentials'
+        ]);
     }
 
     public function logout(Request $request){

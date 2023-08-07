@@ -9,7 +9,7 @@
       </ul>
       <div class="d-flex">
         @auth
-        <p> {{ Auth::user()->name }} </p>
+        <p class="me-2 pt-1">Welcome, {{ auth()->user()->name }} </p>
         @else
         <p>Guest</p>
         @endauth
