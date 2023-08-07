@@ -9,4 +9,9 @@
         <p class="text-white ms-2 fw-bold">Category : {{$post->category->name}}</p>
     </div>
     @endforeach
+    <div class="row my-2">
+        {{ $posts->links()}}
+    </div>
 </x-layout>
+
+

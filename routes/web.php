@@ -42,7 +42,7 @@ Route::controller(EmployeeController::class)->group(function(){
 
     Route::get('/tryhasmany','tryhasmany');
     Route::get('/trybelongsto','trybelongsto');
-    Route::get('/supervisor','supervisor')->name('home')->middleware('auth');
+    Route::get('/supervisor','supervisor')->middleware('auth');
     Route::post('/view/member/{id}','viewmember');
 });
 
