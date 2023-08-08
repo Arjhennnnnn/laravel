@@ -1,16 +1,21 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\NewsletterController;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\User;
+use App\Services\Newsletter;
 use Clockwork\Storage\Search;
 use MailchimpMarketing\ApiClient;
-
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -158,18 +163,74 @@ Route::get('mail', function(){
 });
 
 
-Route::get('ping',function(){
+// Route::get('ping',function(){
     
-    $mailchimp = new \MailchimpMarketing\ApiClient();
+//     $mailchimp = new \MailchimpMarketing\ApiClient();
 
-    $mailchimp->setConfig([
-        'apiKey' => config('services.mailchimp.key'),
-        'server' => 'us21'
-    ]);
+//     $mailchimp->setConfig([
+//         'apiKey' => config('services.mailchimp.key'),
+//         'server' => 'us21'
+//     ]);
+
+//     // $response = $mailchimp->ping->get();
+//     // $response = $mailchimp->lists->getAllLists();
+//     // $response = $mailchimp->lists->getList("74d606f65b");
+//     // $response = $mailchimp->lists->getListMembersInfo("74d606f65b");
+//     $response = $mailchimp->lists->addListMember("74d606f65b" , [
+//         "email_address" => "madlangsakay.arjhen05@gmail.com",
+//         "status" => "subscribed",
+//     ]);
+
+//     ddd($response);
+// });
+
+// Route::post('newsletter/',function(){
+    Route::post('newsletter/',function(Newsletter $newletter){
+
+
+    request()->validate(['email' => 'required|email']);
+    
+    // $mailchimp = new \MailchimpMarketing\ApiClient();
+
+    // $mailchimp->setConfig([
+    //     'apiKey' => config('services.mailchimp.key'),
+    //     'server' => 'us21'
+    // ]);
 
     // $response = $mailchimp->ping->get();
-    $response = $mailchimp->lists->getAllLists();
-    ddd($response);
+    // $response = $mailchimp->lists->getAllLists();
+    // $response = $mailchimp->lists->getList("74d606f65b");
+    // $response = $mailchimp->lists->getListMembersInfo("74d606f65b");
+    try{
+        // $response = $mailchimp->lists->addListMember("74d606f65b" , [
+        //     "email_address" => request('email'),
+        //     "status" => "subscribed",
+        // ]);
+
+
+        // $newletter = new Newsletter();
+        $newletter->subscribe(request('email'));
+    }
+    catch(\Exception $e){
+        throw ValidationException::withMessages([
+            'email' => 'This email could not be added to our newsletter list.'
+        ]);
+    }
+    
+
+    return back()->with('message','You are signed up for our newletter');
+});
+
+Route::post('newsletter/controller',NewsletterController::class);
+
+Route::get('/subscribe',function(){
+    return view('user.newsletter');
+});
+
+Route::get('testing/case',function(){
+    app()->get('foo');
+    return resolve('foo');
 });
 
 
+Route::get('admin/post/create',[AdminController::class,'create']);
