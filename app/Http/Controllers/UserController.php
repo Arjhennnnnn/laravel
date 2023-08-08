@@ -23,7 +23,7 @@ class UserController extends Controller
         ]);
 
         $user = request()->user()->id;
-        $body = request()->comment;
+        $body = request()->body;
 
 
         Comment::create([

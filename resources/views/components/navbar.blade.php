@@ -2,8 +2,8 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Navbar</a>
     <a class="text-decoration-none mt-1 me-3" href="/view/post/user">View Post</a>
-    <a class="text-decoration-none mt-1" href="/supervisor">Supervisor View</a>
-
+    <a class="text-decoration-none mt-1 me-3" href="/supervisor">Supervisor View</a>
+    <a class="text-decoration-none mt-1" href="/admin/post/create">Admin View</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

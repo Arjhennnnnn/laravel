@@ -233,4 +233,6 @@ Route::get('testing/case',function(){
 });
 
 
-Route::get('admin/post/create',[AdminController::class,'create']);
+Route::get('admin/post/create',[AdminController::class,'create'])->middleware('admin');
+Route::post('admin/store',[AdminController::class,'store'])->middleware('admin');
+
