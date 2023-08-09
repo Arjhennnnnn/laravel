@@ -14,7 +14,6 @@ class Newsletter implements ServicesNewsletter{
 
 
 
-
     public function subscribe(string $email, string $list = null){
         $list ??= config('services.mailchimp.lists.subscribers');
         $mailchimp = new ApiClient();

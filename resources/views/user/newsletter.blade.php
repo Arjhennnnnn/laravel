@@ -1,7 +1,10 @@
 <x-layout>
     <div class="row">
         <div class="col-4 offset-4 bg-opacity-50">
-            <form action="/newsletter/controller" method="post">
+            {{-- <form action="/newsletter/controller" method="post"> --}}
+            <form action="/newsletter" method="post">
+
+                
                 @csrf
                 <input type="email" class="form-control mt-2 d-flex" name="email" placeholder="Newletter">
                     @error('email')

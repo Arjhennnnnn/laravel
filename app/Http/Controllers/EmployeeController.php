@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Employees;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,8 @@ use Illuminate\Database\Eloquent\Collection;
 
 class EmployeeController extends Controller
 {
+
+
 
     public function viewmember($id){
         $employees = User::find($id)->members;
@@ -60,16 +63,9 @@ class EmployeeController extends Controller
         return view('user.create');
     }
 
-    public function store(Request $request){
-        $validate = $request->validate([
-            "firstname" => ['required'],
-            "middlename" => ['required'],
-            "lastname" => ['required'],
-            "email" => ['required','email',Rule::unique('employees','email')],
-            "contactnumber" => 'required|digits:11',
-
-        ]);
-        $employee = Employees::create($validate);
+    public function store(){
+        $validate = $this->validatePost();
+        Employees::create($validate);
         return redirect('/')
             ->with('message','Successfully Added');
     }
@@ -82,24 +78,22 @@ class EmployeeController extends Controller
     }
 
 
-    public function update(Request $request,Employees $id){
-
-        $validate = $request -> validate([
-            "firstname" => ['required'],
-            "middlename" => ['required'],
-            "lastname" => ['required'],
-            "email" => ['required','email'],
-            "contactnumber" => ['required'],
-          ]);
-
-          $id->update($validate);
-
-          return back()->with('message','Successfully Update');;
+    public function update(Employees $id){
+        // $validate = $request -> validate([
+        //     "firstname" => ['required'],
+        //     "middlename" => ['required'],
+        //     "lastname" => ['required'],
+        //     "email" => ['required','email'],
+        //     "contactnumber" => ['required'],
+        //   ]);
+        $validate = $this->validatePost($id);
+        $id->update($validate);
+        return back()->with('message','Successfully Update');
     }
 
 
 
-    public function destroy(Request $request , Employees $id){
+    public function destroy(Employees $id){
         $id->delete();
         return redirect('/')->with('message','Successfully Delete');
     }
@@ -125,8 +119,24 @@ class EmployeeController extends Controller
 
     }
 
+    public function validatePost(?Employees $id = null){
+        $validate = request()->validate([
+            "firstname" => ['required'],
+            "middlename" => ['required'],
+            "lastname" => ['required'],
+            "email" => ['required','email',Rule::unique('employees','email')->ignore($id)],
+            "contactnumber" => 'required|digits:11',
+        ]);
+        $validate['supervisor_id'] = auth()->user()->id;
+
+        return $validate;
+    }
+
     }
 
     // DB::table('employees')
     //         ->orderBy('firstname','asc')
     //         ->simplePaginate(5);
+
+  
+

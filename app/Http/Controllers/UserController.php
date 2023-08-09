@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\Comment;
 use App\Models\User;
 use App\Models\Post;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -40,9 +41,12 @@ class UserController extends Controller
         // $posts = Post::latest()->with('author','category')->take(5)->get();
 
         // return view('try.manyrelationship',['posts' => $posts]);
-
+        dd($this->authorize('admin'));
+        dd(Gate::allows('admin'));
         $posts = Post::latest()->with('author','category','comments')->paginate(5);
         $comments = Comment::with('post')->get();
+
+
 
 
     

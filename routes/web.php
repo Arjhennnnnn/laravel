@@ -233,6 +233,7 @@ Route::get('testing/case',function(){
 });
 
 
-Route::get('admin/post/create',[AdminController::class,'create'])->middleware('admin');
-Route::post('admin/store',[AdminController::class,'store'])->middleware('admin');
-
+Route::middleware('admin')->group(function(){
+    Route::get('admin/post/create',[AdminController::class,'create']);
+    Route::post('admin/store',[AdminController::class,'store']);
+});
