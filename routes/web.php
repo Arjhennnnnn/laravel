@@ -8,7 +8,9 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\NewsletterController;
 use App\Models\Category;
+use App\Models\Comment;
 use App\Models\Post;
+use App\Models\Slug;
 use App\Models\User;
 use App\Services\Newsletter;
 use Clockwork\Storage\Search;
@@ -16,6 +18,7 @@ use MailchimpMarketing\ApiClient;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Spatie\YamlFrontMatter\YamlFrontMatter;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -236,4 +239,56 @@ Route::get('testing/case',function(){
 Route::middleware('admin')->group(function(){
     Route::get('admin/post/create',[AdminController::class,'create']);
     Route::post('admin/store',[AdminController::class,'store']);
+});
+
+
+Route::get('slug/{slug}',function($slug){
+    // $path = __DIR__ . "/../resources/posts/{$slug}.html";
+
+    if(! file_exists($path = __DIR__ . "/../resources/posts/{$slug}")){
+        return 'none';
+    }
+
+    cache()->remember("slug/{$slug}",5,function() use ($path){
+        var_dump($path);
+        return file_get_contents($path);
+    });
+
+});
+
+
+Route::get('eps11/{slug}',function($slug){
+
+    $postslug = Slug::find($slug);
+    return $postslug;
+
+});
+
+Route::get('getall',function(){
+
+    $postslug = Slug::all();
+    dd($postslug[0]->getContents());
+    dd($postslug);
+
+});
+
+Route::get('yaml',function(){
+    $document = YamlFrontMatter::parseFile(
+        resource_path('posts/my-first-post')
+    );
+    ddd($document);
+});
+
+
+Route::get('/hasone',function(){
+    $posts = Post::with('category')->get();
+    dd($posts);
+
+    return view('try.tryhasone',['posts' => $posts]);
+});
+
+
+Route::get('/anthony/{id}',function($id){
+    // $comments = Comment::find($id);
+    return view('try.tryhasone',['comments' => Comment::find($id)]);
 });
